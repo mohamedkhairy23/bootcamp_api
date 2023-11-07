@@ -5,6 +5,7 @@ const connectDB = require("./config/db");
 // const logger = require("./middleware/logger");
 const colors = require("colors");
 const morgan = require("morgan");
+const errorHandler = require("./middleware/error");
 
 const bootcamps = require("./routes/bootcamps");
 
@@ -21,6 +22,8 @@ if ((process.env.NODE_ENV = "development")) {
 }
 
 app.use("/api/v1/bootcamps", bootcamps);
+
+app.use(errorHandler);
 
 const PORT = process.env.PORT || 5000;
 
