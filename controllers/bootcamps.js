@@ -1,4 +1,5 @@
 const Bootcamp = require("../models/Bootcamp");
+const Course = require("../models/Course");
 const ErrorResponse = require("../utils/errorResponse");
 const asyncHandler = require("../middleware/async");
 const geocoder = require("../utils/geocoder");
@@ -132,15 +133,23 @@ exports.updateBootcamp = asyncHandler(async (req, res, next) => {
 // @route    DELETE /api/v1/bootcamps/:id
 // @access   Private
 exports.deleteBootcamp = asyncHandler(async (req, res, next) => {
-  const bootcamp = await Bootcamp.findByIdAndDelete(req.params.id);
+  const bootcamp = await Bootcamp.findById(req.params.id);
 
-  if (!bootcamp) {
+  if (bootcamp) {
+    await Bootcamp.deleteOne({ _id: bootcamp._id });
+
+    // For cascading delete
+    await Course.deleteMany({ bootcamp: bootcamp._id });
+
+    res.status(200).json({
+      succes: true,
+      data: {},
+    });
+  } else {
     return next(
       new ErrorResponse(`Bootcamp not found with id of ${req.params.id}`, 404)
     );
   }
-
-  res.status(200).json({ success: true, data: {} });
 });
 
 // @desc     get bootcamps within a radius
