@@ -74,9 +74,11 @@ exports.getBootcamps = asyncHandler(async (req, res, next) => {
     };
   }
 
+  const BootcampsDocumentsCount = (await Bootcamp.find({})).length;
+
   res.status(200).json({
     success: true,
-    countAllDocuments: (await Bootcamp.find({})).length,
+    countAllDocuments: BootcampsDocumentsCount,
     limitPerPage: bootcamps.length,
     pageNumber: page,
     pagination: pagination,
