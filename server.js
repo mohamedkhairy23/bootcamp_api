@@ -1,3 +1,4 @@
+const path = require("path");
 const express = require("express");
 const dotenv = require("dotenv");
 dotenv.config({ path: "./config/.env" });
@@ -9,6 +10,7 @@ const errorHandler = require("./middleware/error");
 
 const bootcamps = require("./routes/bootcamps");
 const courses = require("./routes/courses");
+const uploadRoutes = require("./routes/uploadRoutes");
 
 connectDB();
 
@@ -24,6 +26,9 @@ if ((process.env.NODE_ENV = "development")) {
 
 app.use("/api/v1/bootcamps", bootcamps);
 app.use("/api/v1/courses", courses);
+app.use("/api/v1/upload", uploadRoutes);
+
+app.use("/uploads", express.static(path.join(__dirname, "/uploads")));
 
 app.use(errorHandler);
 
