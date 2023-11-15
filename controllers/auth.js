@@ -14,7 +14,6 @@ exports.register = asyncHandler(async (req, res, next) => {
     return next(new ErrorResponse(`User already exist`, 400));
   }
 
-  // create a user
   const user = await User.create({
     name,
     email,
@@ -22,7 +21,7 @@ exports.register = asyncHandler(async (req, res, next) => {
     role,
   });
 
-  // create token
+  // generate token
   const token = user.getSignedJwtToken();
 
   res.status(200).json({
