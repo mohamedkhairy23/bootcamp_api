@@ -2,6 +2,7 @@ const path = require("path");
 const express = require("express");
 const multer = require("multer");
 const router = express.Router();
+const ErrorResponse = require("../utils/errorResponse");
 
 const storage = multer.diskStorage({
   destination(req, file, cb) {
@@ -22,6 +23,9 @@ function checkFileType(file, cb) {
   if (extname && mimetype) {
     return cb(null, true);
   } else {
+    if (extname !== ".png" && extname !== ".jpg" && extname !== ".jpeg") {
+      return cb(new ErrorResponse(`Please upload only an image file`, 400));
+    }
     cb("Images Only");
   }
 }
