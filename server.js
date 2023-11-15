@@ -7,6 +7,7 @@ const connectDB = require("./config/db");
 const colors = require("colors");
 const morgan = require("morgan");
 const errorHandler = require("./middleware/error");
+var cookieParser = require("cookie-parser");
 
 const bootcamps = require("./routes/bootcamps");
 const courses = require("./routes/courses");
@@ -18,6 +19,7 @@ connectDB();
 const app = express();
 
 app.use(express.json());
+app.use(cookieParser());
 app.use(express.urlencoded({ extended: true }));
 
 // app.use(logger);
