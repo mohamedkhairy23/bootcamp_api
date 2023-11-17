@@ -3,6 +3,7 @@ const express = require("express");
 const multer = require("multer");
 const router = express.Router();
 const ErrorResponse = require("../utils/errorResponse");
+const { protect } = require("../middleware/auth");
 
 const storage = multer.diskStorage({
   destination(req, file, cb) {
@@ -38,15 +39,21 @@ const upload = multer({
   },
 });
 
-router.post("/uploadSingleFile", upload.single("image"), (req, res) => {
-  res.send({
-    message: "Image Uploaded Successfully",
-    image: `/${req.file.path}`,
-  });
-});
+router.post(
+  "/uploadSingleFile",
+  protect,
+  upload.single("image"),
+  (req, res) => {
+    res.send({
+      message: "Image Uploaded Successfully",
+      image: `/${req.file.path}`,
+    });
+  }
+);
 
 router.post(
   "/uploadMultipleImages",
+  protect,
   upload.array("images", 12),
   function (req, res, next) {
     res.send({
