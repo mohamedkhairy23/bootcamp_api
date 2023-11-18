@@ -64,13 +64,17 @@ exports.register = asyncHandler(async (req, res, next) => {
 
   user.save({ validateBeforeSave: false });
 
-  const sendResult = await sendEmail({
+  const sendActivationEmail = await sendEmail({
     email: user.email,
     subject: "Email confirmation token",
     message,
   });
 
-  sendTokenResponse(user, 200, res);
+  res
+    .status(200)
+    .json({ success: true, msg: "Activation Email Sent Successfully" });
+
+  // sendTokenResponse(user, 200, res);
 });
 
 // @desc    Confirm Email
@@ -125,6 +129,15 @@ exports.login = asyncHandler(async (req, res, next) => {
 
   if (!user) {
     return next(new ErrorResponse(`Invalid email or password`, 401));
+  }
+
+  if (user && user.isEmailConfirmed === false) {
+    return next(
+      new ErrorResponse(
+        `User with this email not confirmed yet, check your email to activate this email`,
+        401
+      )
+    );
   }
 
   const isMatch = await user.matchPassword(password);
