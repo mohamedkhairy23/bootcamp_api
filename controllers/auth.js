@@ -52,6 +52,62 @@ exports.register = asyncHandler(async (req, res, next) => {
     role,
   });
 
+  // grab token and send to email
+  const confirmEmailToken = user.generateEmailConfirmToken();
+
+  // Create reset url
+  const confirmEmailURL = `${req.protocol}://${req.get(
+    "host"
+  )}/api/v1/auth/confirmemail?token=${confirmEmailToken}`;
+
+  const message = `You are receiving this email because you need to confirm your email address. Please make a GET request to: \n\n ${confirmEmailURL}`;
+
+  user.save({ validateBeforeSave: false });
+
+  const sendResult = await sendEmail({
+    email: user.email,
+    subject: "Email confirmation token",
+    message,
+  });
+
+  sendTokenResponse(user, 200, res);
+});
+
+// @desc    Confirm Email
+// @route   GET /api/v1/auth/confirmemail
+// @access  Public
+exports.confirmEmail = asyncHandler(async (req, res, next) => {
+  // grab token from email
+  const { token } = req.query;
+
+  if (!token) {
+    return next(new ErrorResponse("Invalid Token", 400));
+  }
+
+  const splitToken = token.split(".")[0];
+  const confirmEmailToken = crypto
+    .createHash("sha256")
+    .update(splitToken)
+    .digest("hex");
+
+  // get user by token
+  const user = await User.findOne({
+    confirmEmailToken,
+    isEmailConfirmed: false,
+  });
+
+  if (!user) {
+    return next(new ErrorResponse("Invalid Token", 400));
+  }
+
+  // update confirmed to true
+  user.confirmEmailToken = undefined;
+  user.isEmailConfirmed = true;
+
+  // save
+  user.save({ validateBeforeSave: false });
+
+  // return token
   sendTokenResponse(user, 200, res);
 });
 
