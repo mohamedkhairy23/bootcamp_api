@@ -12,6 +12,7 @@ var cookieParser = require("cookie-parser");
 const bootcamps = require("./routes/bootcamps");
 const courses = require("./routes/courses");
 const auth = require("./routes/auth");
+const users = require("./routes/users");
 const uploadRoutes = require("./routes/uploadRoutes");
 
 connectDB();
@@ -30,6 +31,7 @@ if ((process.env.NODE_ENV = "development")) {
 app.use("/api/v1/bootcamps", bootcamps);
 app.use("/api/v1/courses", courses);
 app.use("/api/v1/auth", auth);
+app.use("/api/v1/users", users);
 app.use("/api/v1/upload", uploadRoutes);
 
 app.use("/uploads", express.static(path.join(__dirname, "/uploads")));
