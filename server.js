@@ -9,6 +9,8 @@ const morgan = require("morgan");
 const errorHandler = require("./middleware/error");
 var cookieParser = require("cookie-parser");
 const mongoSanitize = require("express-mongo-sanitize");
+const helmet = require("helmet");
+const xss = require("xss-clean");
 
 const bootcamps = require("./routes/bootcamps");
 const courses = require("./routes/courses");
@@ -32,6 +34,12 @@ if ((process.env.NODE_ENV = "development")) {
 
 // Prevent NoSQL Injection & Sanitize Data
 app.use(mongoSanitize());
+
+// Set security headers
+app.use(helmet());
+
+// Prevent cross site scripting attacks (XSS attacks)
+app.use(xss());
 
 app.use("/api/v1/bootcamps", bootcamps);
 app.use("/api/v1/courses", courses);
