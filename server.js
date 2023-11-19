@@ -8,6 +8,7 @@ const colors = require("colors");
 const morgan = require("morgan");
 const errorHandler = require("./middleware/error");
 var cookieParser = require("cookie-parser");
+const mongoSanitize = require("express-mongo-sanitize");
 
 const bootcamps = require("./routes/bootcamps");
 const courses = require("./routes/courses");
@@ -28,6 +29,9 @@ app.use(express.urlencoded({ extended: true }));
 if ((process.env.NODE_ENV = "development")) {
   app.use(morgan("dev"));
 }
+
+// Prevent NoSQL Injection & Sanitize Data
+app.use(mongoSanitize());
 
 app.use("/api/v1/bootcamps", bootcamps);
 app.use("/api/v1/courses", courses);
