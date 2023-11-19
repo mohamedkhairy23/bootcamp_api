@@ -149,6 +149,21 @@ exports.login = asyncHandler(async (req, res, next) => {
   sendTokenResponse(user, 200, res);
 });
 
+// @desc     Log user out / clear cookie
+// @route    GET /api/v1/auth/logout
+// @access   Private
+exports.logout = asyncHandler(async (req, res, next) => {
+  res.cookie("token", "", {
+    httpOnly: true,
+    expires: new Date(0),
+  });
+
+  res.status(200).json({
+    success: true,
+    msg: "Logged out successfully",
+  });
+});
+
 // @desc     Get current logged in user
 // @route    GET /api/v1/auth/me
 // @access   Private
