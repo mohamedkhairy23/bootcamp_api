@@ -11,6 +11,9 @@ var cookieParser = require("cookie-parser");
 const mongoSanitize = require("express-mongo-sanitize");
 const helmet = require("helmet");
 const xss = require("xss-clean");
+const rateLimit = require("express-rate-limit");
+const hpp = require("hpp");
+const cors = require("cors");
 
 const bootcamps = require("./routes/bootcamps");
 const courses = require("./routes/courses");
@@ -32,6 +35,8 @@ if ((process.env.NODE_ENV = "development")) {
   app.use(morgan("dev"));
 }
 
+///////////////////Code Below For Security///////////
+
 // Prevent NoSQL Injection & Sanitize Data
 app.use(mongoSanitize());
 
@@ -40,6 +45,21 @@ app.use(helmet());
 
 // Prevent cross site scripting attacks (XSS attacks)
 app.use(xss());
+
+// Rate Limiting (100 requests per 10 mins)
+const limiter = rateLimit({
+  windowMs: 10 * 60 * 1000, // 10 mins
+  max: 100, // 100 requests
+});
+app.use(limiter);
+
+// Prevent HTTP parameter pollution attacks (hpp attacks)
+app.use(hpp());
+
+// Enable CORS
+app.use(cors());
+
+///////////////////Code Above For Security///////////
 
 app.use("/api/v1/bootcamps", bootcamps);
 app.use("/api/v1/courses", courses);
