@@ -3,6 +3,7 @@ const Course = require("../models/Course");
 const ErrorResponse = require("../utils/errorResponse");
 const asyncHandler = require("../middleware/async");
 const geocoder = require("../utils/geocoder");
+const Review = require("../models/Review");
 
 // @desc     Get all bootcamps
 // @route    GET /api/v1/bootcamps
@@ -107,6 +108,7 @@ exports.deleteBootcamp = asyncHandler(async (req, res, next) => {
 
     // For cascading delete
     await Course.deleteMany({ bootcamp: bootcamp._id });
+    await Review.deleteMany({ bootcamp: bootcamp._id });
 
     res.status(200).json({
       succes: true,
