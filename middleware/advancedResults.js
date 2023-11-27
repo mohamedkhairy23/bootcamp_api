@@ -22,6 +22,17 @@ const advancedResults = (model, populate) => async (req, res, next) => {
   // Finding resource
   query = model.find(JSON.parse(queryStr));
 
+  const keyword = req.query.search
+    ? {
+        $or: [
+          { name: { $regex: req.query.search, $options: "i" } },
+          { email: { $regex: req.query.search, $options: "i" } },
+        ],
+      }
+    : {};
+
+  query = model.find(keyword);
+
   // Select fields
   if (req.query.select) {
     const fields = req.query.select.split(",").join(" ");
