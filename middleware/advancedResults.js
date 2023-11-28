@@ -20,7 +20,7 @@ const advancedResults = (model, populate) => async (req, res, next) => {
   );
 
   // Finding resource
-  query = model.find({ queryStr });
+  query = model.find(JSON.parse(queryStr));
 
   if (req.query.search) {
     const keyword = req.query.search
