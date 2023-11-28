@@ -20,18 +20,20 @@ const advancedResults = (model, populate) => async (req, res, next) => {
   );
 
   // Finding resource
-  query = model.find(JSON.parse(queryStr));
+  query = model.find({ queryStr });
 
-  const keyword = req.query.search
-    ? {
-        $or: [
-          { name: { $regex: req.query.search, $options: "i" } },
-          { email: { $regex: req.query.search, $options: "i" } },
-        ],
-      }
-    : {};
+  if (req.query.search) {
+    const keyword = req.query.search
+      ? {
+          $or: [
+            { name: { $regex: req.query.search, $options: "i" } },
+            { email: { $regex: req.query.search, $options: "i" } },
+          ],
+        }
+      : {};
 
-  query = model.find(keyword);
+    query = model.find(keyword);
+  }
 
   // Select fields
   if (req.query.select) {
@@ -80,10 +82,11 @@ const advancedResults = (model, populate) => async (req, res, next) => {
     };
   }
 
-  const allDocumentsCount = (await model.find({})).length;
+  // const allDocumentsCount = (await model.find({})).length;
+
   res.advancedResults = {
     success: true,
-    allDocumentsCount: allDocumentsCount,
+    allDocumentsCount: total,
     // count: results.length,
     limitPerPage: limit,
     pageNumber: page,
