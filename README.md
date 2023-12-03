@@ -17,7 +17,7 @@ Courses Functionalities and there are endpoints for:
 
 - Calculate the average cost of a Bootcamp by calculating the average cost of the Bootcamp courses and update the value of Bootcamp average cost when deleting a course, updating a course price, or adding a course to the Bootcamp.
 
-- Query strings for filtration, sort, select, pagination with page and limit, and search.
+- Query strings for filtration, sort, select, search, and pagination with page and limit.
 
 - Handling Errors (Mongoose Bad ObjectId - Mongoose duplicate key - Mongoose Validation Error - Server error)
 
