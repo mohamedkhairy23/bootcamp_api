@@ -21,6 +21,10 @@ Courses Functionalities and there are endpoints for:
 
 - Handling Errors (Mongoose Bad ObjectId - Mongoose duplicate key - Mongoose Validation Error - Server error)
 
+- Populate and reverse of populate(Virtuals)
+
+- Cascading delete
+
 Review functionalities for Bootcamps:
 (Get reviews for a specific Bootcamp by BootcampID - Get a single review for a Bootcamp by BootcampID - Add a review for a Bootcamp by BootcampID - Update a review - Delete a review)
 - Calculate the average rating of a Bootcamp by calculating the average rates of the Bootcamp reviews and update the value of Bootcamp rating when deleting a Bootcamp review, updating a Bootcamp review, or adding a review to the Bootcamp.
