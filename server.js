@@ -70,6 +70,12 @@ app.use("/api/v1/upload", uploadRoutes);
 
 app.use("/uploads", express.static(path.join(__dirname, "/uploads")));
 
+if (process.env.NODE_ENV === "development") {
+  app.get("/", (req, res) => {
+    res.send("API is Running Successfully");
+  });
+}
+
 app.use(errorHandler);
 
 const PORT = process.env.PORT || 5000;
