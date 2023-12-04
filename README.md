@@ -1,4 +1,4 @@
-# dev_camper_api
+# dev_camper_api  https://devcamper-me64.onrender.com/
 
 Authentication using JWT and cookies and there are endpoints for: 
 (Register user - Confirm email by sending confirmation email token (Nodemailer for sending confirmation emails) - 
