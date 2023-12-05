@@ -1,7 +1,7 @@
 # dev_camper_api  
 Documentation Link: https://documenter.getpostman.com/view/17269685/2s9YeLY9F6
 
-Features:
+Project Features:
 
 Authentication using JWT and cookies and there are endpoints for: 
 (Register user - Confirm email by sending confirmation email token (Nodemailer for sending confirmation emails) - 
