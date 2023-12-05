@@ -2,6 +2,7 @@
 Documentation Link: https://documenter.getpostman.com/view/17269685/2s9YeLY9F6
 
 Features:
+
 Authentication using JWT and cookies and there are endpoints for: 
 (Register user - Confirm email by sending confirmation email token (Nodemailer for sending confirmation emails) - 
 Login a user - Logout a user - Get current logged-in user - Forgot Password - Reset password - Update Profile - Update password for logged-in user)
