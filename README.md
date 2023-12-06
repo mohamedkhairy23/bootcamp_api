@@ -23,9 +23,11 @@ Courses Functionalities and there are endpoints for:
 
 - Handling Errors (Mongoose Bad ObjectId - Mongoose duplicate key - Mongoose Validation Error - Server error)
 
-- Populate and reverse of populate(Virtuals)
+- Populate and reverse of populating(Virtuals)
 
 - Cascading delete
+
+- Multer for uploading files on the server and there are endpoints for: (Uploading single file(image) - Uploading multiple files(images)).
 
 Review functionalities for Bootcamps:
 (Get reviews for a specific Bootcamp by BootcampID - Get a single review for a Bootcamp by BootcampID - Add a review for a Bootcamp by BootcampID - Update a review - Delete a review)
