@@ -27,6 +27,7 @@ const advancedResults = (model, populate) => async (req, res, next) => {
     (keyword.$or = [
       { name: { $regex: req.query.search, $options: "i" } },
       { email: { $regex: req.query.search, $options: "i" } },
+      { title: { $regex: req.query.search, $options: "i" } },
     ]),
       (query = query.find(keyword));
   }
