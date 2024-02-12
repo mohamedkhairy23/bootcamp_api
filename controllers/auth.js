@@ -51,8 +51,9 @@ exports.register = asyncHandler(async (req, res, next) => {
   // grab token and send to email
   const activationToken = createActivationToken(user);
 
-  const activationUrl = `https://devcamper-me64.onrender.com/api/v1/auth/confirmemail/${activationToken}`;
-  // const activationUrl = `http://localhost:5000/api/v1/auth/confirmemail/${activationToken}`;
+  const activationUrl = `${req.protocol}://${req.get(
+    "host"
+  )}/api/v1/auth/confirmemail/${activationToken}`;
 
   const sendActivationEmail = await sendEmail({
     email: user.email,
