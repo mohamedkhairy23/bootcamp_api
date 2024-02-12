@@ -3,6 +3,7 @@ const User = require("../models/User");
 const ErrorResponse = require("../utils/errorResponse");
 const asyncHandler = require("../middleware/async");
 const sendEmail = require("../utils/sendMail");
+const jwt = require("jsonwebtoken");
 
 const sendTokenResponse = (user, statusCode, res) => {
   const token = user.getSignedJwtToken();
@@ -45,68 +46,60 @@ exports.register = asyncHandler(async (req, res, next) => {
     return next(new ErrorResponse(`User already exist`, 400));
   }
 
-  const user = await User.create({
-    name,
-    email,
-    password,
-    role,
-  });
+  const user = { name, email, password, role };
 
   // grab token and send to email
-  const confirmEmailToken = user.generateEmailConfirmToken();
+  const activationToken = createActivationToken(user);
 
-  // Create reset url
-  const confirmEmailURL = `${req.protocol}://${req.get(
-    "host"
-  )}/api/v1/auth/confirmemail?token=${confirmEmailToken}`;
-
-  const message = `You are receiving this email because you need to confirm your email address. Please make a GET request to: \n\n ${confirmEmailURL}`;
-
-  user.save({ validateBeforeSave: false });
+  // const activationUrl = `https://devcamper-me64.onrender.com/api/v1/auth/confirmemail/${activationToken}`;
+  const activationUrl = `http://localhost:5000/api/v1/auth/confirmemail/${activationToken}`;
 
   const sendActivationEmail = await sendEmail({
     email: user.email,
     subject: "Email confirmation token",
-    message,
+    message: activationUrl,
   });
 
-  res
-    .status(200)
-    .json({ success: true, msg: "Activation Email Sent Successfully" });
-
-  // sendTokenResponse(user, 200, res);
+  res.status(200).json({
+    success: true,
+    msg: "Activation Email Sent Successfully",
+  });
 });
+
+// create activation token
+const createActivationToken = (user) => {
+  return jwt.sign(user, process.env.JWT_SECRET, {
+    expiresIn: "5m",
+  });
+};
 
 // @desc    Confirm Email
 // @route   GET /api/v1/auth/confirmemail
 // @access  Public
 exports.confirmEmail = asyncHandler(async (req, res, next) => {
-  // grab token from email
-  const { token } = req.query;
+  const { token } = req.body;
 
-  if (!token) {
+  const newUser = jwt.verify(token, process.env.JWT_SECRET);
+
+  if (!newUser) {
     return next(new ErrorResponse("Invalid Token", 400));
   }
 
-  const splitToken = token.split(".")[0];
-  const confirmEmailToken = crypto
-    .createHash("sha256")
-    .update(splitToken)
-    .digest("hex");
+  const { name, email, password, role } = newUser;
 
-  // get user by token
-  const user = await User.findOne({
-    confirmEmailToken,
-    isEmailConfirmed: false,
+  let user = await User.findOne({ email });
+
+  if (user) {
+    return next(new ErrorResponse("User already exists", 400));
+  }
+
+  user = await User.create({
+    name,
+    email,
+    password,
+    role,
+    isEmailConfirmed: true,
   });
-
-  if (!user) {
-    return next(new ErrorResponse("Invalid Token", 400));
-  }
-
-  // update confirmed to true
-  user.confirmEmailToken = undefined;
-  user.isEmailConfirmed = true;
 
   // save
   user.save({ validateBeforeSave: false });
