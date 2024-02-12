@@ -78,9 +78,9 @@ const createActivationToken = (user) => {
 // @route   GET /api/v1/auth/confirmemail
 // @access  Public
 exports.confirmEmail = asyncHandler(async (req, res, next) => {
-  const { token } = req.body;
+  const { activationToken } = req.body;
 
-  const newUser = jwt.verify(token, process.env.JWT_SECRET);
+  const newUser = jwt.verify(activationToken, process.env.JWT_SECRET);
 
   if (!newUser) {
     return next(new ErrorResponse("Invalid Token", 400));
@@ -100,10 +100,8 @@ exports.confirmEmail = asyncHandler(async (req, res, next) => {
     password,
     role,
     isEmailConfirmed: true,
+    activationToken: undefined,
   });
-
-  // save
-  user.save({ validateBeforeSave: false });
 
   // return token
   sendTokenResponse(user, 200, res);

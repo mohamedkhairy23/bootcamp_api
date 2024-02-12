@@ -30,7 +30,7 @@ const UserSchema = new mongoose.Schema({
   },
   resetPasswordToken: String,
   resetPasswordExpire: Date,
-  confirmEmailToken: String,
+  activationToken: String,
   isEmailConfirmed: {
     type: Boolean,
     default: false,
