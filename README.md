@@ -1,6 +1,6 @@
-Dev Camper API Documentation Link: https://documenter.getpostman.com/view/17269685/2s9YeLY9F6
+## Dev Camper API Documentation Link: https://documenter.getpostman.com/view/17269685/2s9YeLY9F6
 
-Project Features:
+## Project Features:
 
 Authentication using JWT and cookies and there are endpoints for: 
 (Register user - Confirm email by sending confirmation email token (Nodemailer for sending confirmation emails) - 
@@ -19,7 +19,7 @@ Courses Functionalities and there are endpoints for:
 
 - Calculate the average cost of a Bootcamp by calculating the average cost of the Bootcamp courses and update the value of Bootcamp average cost when deleting a course, updating a course price, or adding a course to the Bootcamp.
 
-- Endpoints for the last 12 months statistics for users, boot-camps, and courses. 
+- Endpoints for the last 12 months statistics for users, bootcamps, and courses. 
 
 - Query strings for advanced filtration, sort, select, search, and pagination with page and limit.
 
